@@ -1,7 +1,7 @@
-image_name := env("BUILD_IMAGE_NAME", "debian-bootc")
+image_name := env("BUILD_IMAGE_NAME", "microb-bootc")
 image_tag := env("BUILD_IMAGE_TAG", "latest")
 base_dir := env("BUILD_BASE_DIR", ".")
-filesystem := env("BUILD_FILESYSTEM", "ext4")
+filesystem := env("BUILD_FILESYSTEM", "btrfs")
 
 container_runtime := env("CONTAINER_RUNTIME", `command -v podman >/dev/null 2>&1 && echo podman || echo docker`)
 
