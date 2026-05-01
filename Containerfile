@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
     apt-get update -y && \
-    apt-get -y install ca-certificates curl gpg lsb-release && \
+    apt-get -y install ca-certificates git curl gpg lsb-release && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL -A "Mozilla/5.0 (X11; Linux x86_64)" https://gitlab.com/afrd.gpg | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/xanmod-release.list && \
@@ -41,6 +41,32 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN apt-get update -y && apt-get install -y whois
 # RUN usermod -p "$(echo "changeme" | mkpasswd -s)" root
 
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
+    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
+    #
+    apt-get update && apt-get install --fix-missing -y \
+    sudo vim network-manager flatpak distrobox \
+    cups hplip tailscale \
+    gnome-core gnome-initial-setup nm-connection-editor && \
+    #
+    systemctl enable gdm && \
+    apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    /ctx/config.sh
+
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /usr/bin/systemctl preset brew-setup.service && \
+    /usr/bin/systemctl preset brew-update.timer && \
+    /usr/bin/systemctl preset brew-upgrade.timer
+
+
 ENV CARGO_HOME=/tmp/rust
 ENV RUSTUP_HOME=/tmp/rust
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
@@ -56,20 +82,6 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     apt-get autoremove -y && \
     apt-get clean -y
 
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
-    #
-    apt-get update && apt-get install --fix-missing -y \
-    sudo vim network-manager flatpak distrobox \
-    cups hplip tailscale \
-    gnome-core gnome-initial-setup nm-connection-editor && \
-    #
-    systemctl enable gdm && \
-    apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
 # Necessary for general behavior expected by image-based systems
 RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     rm -rf /boot /home /root /usr/local /srv /var && \
@@ -78,21 +90,6 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "$(for dir in opt home srv mnt usrlocal ; do echo "d /var/$dir 0755 root root -" ; done)" | tee -a "/usr/lib/tmpfiles.d/bootc-base-dirs.conf" && \
     printf "d /var/roothome 0700 root root -\nd /run/media 0755 root root -" | tee -a "/usr/lib/tmpfiles.d/bootc-base-dirs.conf" && \
     printf '[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n' | tee "/usr/lib/ostree/prepare-root.conf"
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/config.sh
-
-
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
-RUN --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /usr/bin/systemctl preset brew-setup.service && \
-    /usr/bin/systemctl preset brew-update.timer && \
-    /usr/bin/systemctl preset brew-upgrade.timer
 
 RUN rm -rf /var/cache/
 
