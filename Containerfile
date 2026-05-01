@@ -27,9 +27,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN printf 'add_dracutmodules+=" plymouth "\nadd_drivers+=" amdgpu i915 xe "\n' \
-    | tee /usr/lib/dracut/dracut.conf.d/31-gpu-plymouth.conf
-
 # Setup a temporary root passwd (changeme) for dev purposes
 # RUN apt-get update -y && apt-get install -y whois
 # RUN usermod -p "$(echo "changeme" | mkpasswd -s)" root
@@ -43,7 +40,7 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     git clone "https://github.com/bootc-dev/bootc.git" /tmp/bootc && \
     sh -c ". ${RUSTUP_HOME}/env ; make -C /tmp/bootc bin install-all" && \
     printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-fix-bootc-module.conf" && \
-    printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
+    printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc plymouth "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
     dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/initramfs.img" && \
     apt-get purge -y git make build-essential go-md2man libzstd-dev pkgconf libostree-dev && \
     apt-get autoremove -y && \
