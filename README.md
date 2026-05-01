@@ -1,14 +1,18 @@
-Forked from <https://github.com/bootcrew/mono>
+Based on the work from <https://github.com/bootcrew/mono>
 
 
 # Features
 - Based on latest Debian sid
 - Super minimal gnome install
 - XanModLTS-v3 kernel
+- Apparmor.d
+- Ublue-like tools (brew, uupd, flatpaks)
+- Firmwares and codecs ootb (for amd/intel)
+- TPM/LUKS/Systemd-homed support
 
-# Debian Bootc
+# Microb
 
-Reference [Debian](https://debian.org/) container image preconfigured for [bootc](https://github.com/bootc-dev/bootc) usage.
+Minimal debian-bootc OS
 
 <img width="2196" height="1239" alt="image" src="https://github.com/user-attachments/assets/0b031de0-5593-49e8-8e5a-535ebdcf46e3" />
 
@@ -21,7 +25,3 @@ just generate-bootable-image # Generates a bootable image for you using bootc!
 ```
 
 Then you can run the `bootable.img` as your boot disk in your preferred hypervisor.
-
-## Notes
-
-For Debian Stable, please take a look at <https://github.com/linuxsnow/debian-bootc-core> or pull request workflows in order to make it work in this repo. Thank you!
