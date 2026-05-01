@@ -21,6 +21,7 @@ RUN sed -i 's/^Components: main.*/Components: main contrib non-free non-free-fir
 RUN apt-get update && apt-get install -y --no-install-recommends \
     firmware-amd-graphics \
     firmware-misc-nonfree \
+    firmware-atheros \
     libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 \
     plymouth \
     plymouth-themes \
