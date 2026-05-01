@@ -15,16 +15,13 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     apt-get clean -y
 
 
-RUN echo "deb http://deb.debian.org/debian sid main contrib non-free-firmware" \
-    > /etc/apt/sources.list
+RUN sed -i 's/^Components: main.*/Components: main contrib non-free non-free-firmware/' \
+    /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     firmware-amd-graphics \
     firmware-misc-nonfree \
     libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 \
-    mesa-va-drivers \
-    intel-media-va-driver \
-    xserver-xorg-video-amdgpu \
     plymouth \
     plymouth-themes \
     && apt-get clean \
