@@ -61,7 +61,7 @@ RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
     #
     apt-get update && apt-get install --fix-missing -y \
-    sudo sudo-rs vim podman network-manager flatpak distrobox \
+    sudo vim podman network-manager flatpak distrobox \
     cups hplip tailscale \
     gnome-core gnome-initial-setup && \
     #
