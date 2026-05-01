@@ -12,6 +12,7 @@ apt-get update && apt-get install -y \
     network-manager-sstp-gnome \
     network-manager-vpnc-gnome \
     openssh-server \
+    gcr \
     nm-connection-editor
 
 
