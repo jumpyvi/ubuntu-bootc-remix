@@ -31,6 +31,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     plymouth \
     plymouth-themes \
     systemd-cryptsetup \
+    cryptsetup \
+    cryptsetup-initramfs \
+    dosfstools \
+    keyutils \
     systemd-homed \
     tpm2-tools \
     libtss2-rc0 \
