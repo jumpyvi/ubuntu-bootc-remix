@@ -1,5 +1,5 @@
 FROM scratch AS ctx
-COPY pkgs /
+COPY build_files /
 
 FROM docker.io/library/debian:sid
 
