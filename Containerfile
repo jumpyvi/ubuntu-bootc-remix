@@ -27,7 +27,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     firmware-amd-graphics \
     firmware-misc-nonfree \
     firmware-atheros \
-    systemd-resolved \
     libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 libavcodec-extra \
     plymouth \
     plymouth-themes \
@@ -51,9 +50,9 @@ RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
     #
     apt-get update && apt-get install --fix-missing -y \
-    sudo vim network-manager flatpak distrobox \
+    sudo vim flatpak distrobox \
     cups hplip tailscale \
-    gnome-core gnome-initial-setup nm-connection-editor && \
+    gnome-core gnome-initial-setup && \
     #
     systemctl enable gdm && \
     apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
