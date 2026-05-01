@@ -61,9 +61,9 @@ RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
     #
     apt-get update && apt-get install --fix-missing -y \
-    sudo vim podman network-manager flatpak distrobox \
+    sudo vim network-manager flatpak distrobox \
     cups hplip tailscale \
-    gnome-core gnome-initial-setup && \
+    gnome-core gnome-initial-setup nm-connection-editor && \
     #
     systemctl enable gdm && \
     apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
