@@ -21,9 +21,11 @@ apt -y install apparmor.d apparmor apparmor-profiles apparmor-utils
 
 
 mkdir -p /usr/lib/bootc/kargs.d/
+mkdir -p /etc/systemd/system/apparmor.service.d/
 mkdir -p /etc/apparmor/earlypolicy/
 
-echo 'kargs = ["lsm=landlock,lockdown,yama,integrity,apparmor,bpf"]' | tee "/usr/lib/bootc/kargs.d/10-apparmor.toml" > /dev/null
+printf 'kargs = ["apparmor=1", "lsm=lockdown,yama,apparmor"]\n' > /usr/lib/bootc/kargs.d/10-apparmor.toml
+printf '[Unit]\nConditionSecurity=\n' > /etc/systemd/system/apparmor.service.d/override.conf
 
 echo 'write-cache' | tee -a /etc/apparmor/parser.conf
 echo 'cache-loc /etc/apparmor/earlypolicy/' | tee -a /etc/apparmor/parser.conf
