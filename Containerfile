@@ -19,6 +19,7 @@ RUN sed -i 's/^Components: main.*/Components: main contrib non-free non-free-fir
     /etc/apt/sources.list.d/debian.sources
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    firmware-linux \
     firmware-amd-graphics \
     firmware-misc-nonfree \
     firmware-atheros \
