@@ -17,9 +17,9 @@ apt-get update && apt-get install -y \
 
 
 
-install -Dm644 /dev/stdin /etc/hosts <<'EOF'
-127.0.0.1   localhost
-::1         localhost
-EOF
+#install -Dm644 /dev/stdin /etc/hosts <<'EOF'
+#127.0.0.1   localhost
+#::1         localhost
+#EOF
 
-ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+#ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
