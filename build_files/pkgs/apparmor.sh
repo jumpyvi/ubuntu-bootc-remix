@@ -6,7 +6,7 @@ apt-get install -y lsb-release wget gnupg
 
 wget -qO - https://pkg.pujol.io/debian/gpgkey \
     | gpg --dearmor \
-    | sudo tee /usr/share/keyrings/roddhjav.gpg >/dev/null
+    | tee /usr/share/keyrings/roddhjav.gpg >/dev/null
 cat <<-EOF | tee /etc/apt/sources.list.d/roddhjav.sources
 Types: deb
 URIs: https://pkg.pujol.io/debian/repo
