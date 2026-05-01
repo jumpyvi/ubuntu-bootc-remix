@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     firmware-amd-graphics \
     firmware-misc-nonfree \
     firmware-atheros \
+    systemd-resolved \
     libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 libavcodec-extra \
     plymouth \
     plymouth-themes \

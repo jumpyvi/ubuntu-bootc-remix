@@ -4,4 +4,4 @@ set -ouex pipefail
 
 apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst qemu-system cpu-checker
 
-apt install -y podman rsync rclone git
+apt install -y podman rsync rclone git openssh-server openssh-client
