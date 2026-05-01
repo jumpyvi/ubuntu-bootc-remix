@@ -21,14 +21,19 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
 RUN sed -i 's/^Components: main.*/Components: main contrib non-free non-free-firmware/' \
     /etc/apt/sources.list.d/debian.sources
 
+# Firmware, codecs and encryption
 RUN apt-get update && apt-get install -y --no-install-recommends \
     firmware-linux \
     firmware-amd-graphics \
     firmware-misc-nonfree \
     firmware-atheros \
-    libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 \
+    libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 libavcodec-extra \
     plymouth \
     plymouth-themes \
+    systemd-cryptsetup \
+    systemd-homed \
+    tpm2-tools \
+    libtss2-rc0 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -45,7 +50,7 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     git clone "https://github.com/bootc-dev/bootc.git" /tmp/bootc && \
     sh -c ". ${RUSTUP_HOME}/env ; make -C /tmp/bootc bin install-all" && \
     printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-fix-bootc-module.conf" && \
-    printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc plymouth "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
+    printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc tpm2-tss crypt plymouth "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
     dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/initramfs.img" && \
     apt-get purge -y git make build-essential go-md2man libzstd-dev pkgconf libostree-dev && \
     apt-get autoremove -y && \
