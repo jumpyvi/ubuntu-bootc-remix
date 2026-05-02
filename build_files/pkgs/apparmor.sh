@@ -20,6 +20,8 @@ cp -r /etc/apparmor* /usr/local/etc/
 printf 'kargs = ["apparmor=1", "lsm=lockdown,yama,apparmor"]\n' > /usr/lib/bootc/kargs.d/10-apparmor.toml
 printf '[Unit]\nConditionSecurity=\n' > /etc/systemd/system/apparmor.service.d/override.conf
 
+echo 'kernel.apparmor_restrict_unprivileged_userns=0' > /etc/sysctl.d/60-apparmor.conf
+
 #echo 'write-cache' | tee -a /etc/apparmor/parser.conf
 #echo 'cache-loc /etc/apparmor/earlypolicy/' | tee -a /etc/apparmor/parser.conf
 #echo 'Optimize=compress-fast' | tee -a /etc/apparmor/parser.conf
