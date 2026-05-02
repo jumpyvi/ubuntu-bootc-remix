@@ -1,20 +1,16 @@
 Based on the work from <https://github.com/bootcrew/mono>
 
+# Bunny
+
+Minimal ubuntu-bootc OS
+
 
 # Features
-- Based on latest Debian sid
-- Super minimal gnome install
-- Default Ubuntu kernel
-- Apparmor.d
+- Based on latest Ubuntu (stuck on Questing for now)
+- Ubuntu bloat removed (No snaps, default apps)
 - Ublue-like tools (brew, uupd, flatpaks)
 - Firmwares and codecs ootb (for amd/intel)
 - TPM/LUKS/Systemd-homed support
-
-# Microb
-
-Minimal debian-bootc OS
-
-<img width="2196" height="1239" alt="image" src="https://github.com/user-attachments/assets/0b031de0-5593-49e8-8e5a-535ebdcf46e3" />
 
 ## Building
 
