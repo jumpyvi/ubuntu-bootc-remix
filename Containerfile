@@ -1,9 +1,14 @@
 FROM scratch AS ctx
 COPY build_files /
 
-FROM docker.io/library/debian:sid
+FROM docker.io/library/ubuntu:questing
 
 ARG DEBIAN_FRONTEND=noninteractive
+
+RUN echo 'Package: snapd\nPin: release a=*\nPin-Priority: -10' > /etc/apt/preferences.d/nosnap
+
+RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list && \
+    apt-get update
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
     apt-get update -y && \
@@ -13,20 +18,15 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/xanmod-release.list && \
     apt-get update -y && \
     apt-get install -y linux-xanmod-lts-x64v3 scx-scheds clang libelf-dev lld llvm && \
-    apt-get install -y btrfs-progs dosfstools e2fsprogs fdisk firmware-linux-free skopeo systemd systemd-boot* xfsprogs && \
+    apt-get install -y btrfs-progs dosfstools e2fsprogs fdisk skopeo systemd systemd-boot* xfsprogs && \
     cp /boot/vmlinuz-* "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/vmlinuz" && \
     apt-get clean -y
 
 
-RUN sed -i 's/^Components: main.*/Components: main contrib non-free non-free-firmware/' \
-    /etc/apt/sources.list.d/debian.sources
-
 # Firmware, codecs and encryption
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    firmware-linux \
-    firmware-amd-graphics \
-    firmware-misc-nonfree \
-    firmware-atheros \
+    amd64-microcode \
+    linux-firmware \
     libgl1-mesa-dri mesa-vulkan-drivers libegl-mesa0 libglx-mesa0 libavcodec-extra \
     plymouth \
     plymouth-themes \
@@ -52,11 +52,11 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get update && apt-get install --fix-missing -y \
     sudo vim flatpak distrobox \
     cups hplip tailscale \
-    gnome-core gnome-initial-setup python3-nautilus && \
+    ubuntu-desktop python3-nautilus && \
     #
     systemctl enable gdm && \
-    apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
-    && apt-get clean \
+    #apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
+    apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
