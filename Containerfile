@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dosfstools \
     keyutils \
     systemd-homed \
+    systemd-zram-generator \
     tpm2-tools \
     libtss2-rc0 \
     && apt-get clean \
