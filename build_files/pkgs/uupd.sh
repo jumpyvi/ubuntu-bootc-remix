@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 echo "Downloading and installing uupd binary..."
-curl -sL https://github.com/ublue-os/uupd/releases/download/v1.3.0/uupd_Linux_arm64.tar.gz | tar -xz uupd
+curl -sL https://github.com/ublue-os/uupd/releases/download/v1.3.0/uupd_Linux_x86_64.tar.gz | tar -xz uupd
 install -Dm755 -t "/usr/bin" uupd
 rm -f uupd
 
