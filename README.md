@@ -4,7 +4,7 @@ Based on the work from <https://github.com/bootcrew/mono>
 # Features
 - Based on latest Debian sid
 - Super minimal gnome install
-- XanModLTS-v3 kernel
+- Default Ubuntu kernel
 - Apparmor.d
 - Ublue-like tools (brew, uupd, flatpaks)
 - Firmwares and codecs ootb (for amd/intel)
