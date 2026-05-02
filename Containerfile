@@ -53,7 +53,7 @@ RUN apt-get update && apt-get install -y curl && \
     ubuntu-desktop python3-nautilus && \
     #
     systemctl enable gdm && \
-    #apt-get remove -y gnome-software packagekit firefox-esr showtime gnome-maps snapshot simple-scan gnome-connections gnome-contacts gnome-calculator gnome-clocks gnome-weather \
+    apt-get remove -y packagekit totem snapshot shotwell simple-scan transmission-gtk rhythmbox gnome-calculator remmina usb-creator-gtk gnome-clocks deja-dup libreoffice* \
     apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
