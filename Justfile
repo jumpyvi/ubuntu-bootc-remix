@@ -12,7 +12,6 @@ bootc *ARGS:
     sudo {{container_runtime}} run \
         --rm --privileged --pid=host \
         -it \
-        -v /sys/fs/selinux:/sys/fs/selinux \
         -v /etc/containers:/etc/containers:Z \
         -v /var/lib/containers:/var/lib/containers:Z \
         -v /dev:/dev \

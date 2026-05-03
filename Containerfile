@@ -7,8 +7,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN echo 'APT::Architecture-Variants "amd64v3";' > /etc/apt/apt.conf.d/99enable-amd64v3
 
-RUN echo 'Package: snapd\nPin: release a=*\nPin-Priority: -10' > /etc/apt/preferences.d/nosnap
-
 RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list && \
     apt-get update
 
@@ -63,14 +61,6 @@ RUN apt-get update && apt-get install -y curl && \
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/config.sh
 
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
-RUN --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /usr/bin/systemctl preset brew-setup.service && \
-    /usr/bin/systemctl preset brew-update.timer && \
-    /usr/bin/systemctl preset brew-upgrade.timer
-
 
 ENV CARGO_HOME=/tmp/rust
 ENV RUSTUP_HOME=/tmp/rust
@@ -87,14 +77,17 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     apt-get autoremove -y && \
     apt-get clean -y
 
-# Necessary for general behavior expected by image-based systems
-RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
-    rm -rf /boot /home /root /srv /var && \
-    mkdir -p /sysroot /boot /usr/lib/ostree /var && \
-    ln -s sysroot/ostree /ostree && ln -s var/roothome /root && ln -s var/srv /srv && ln -s var/opt /opt && ln -s var/mnt /mnt && ln -s var/home /home && \
-    echo "$(for dir in opt home srv mnt usrlocal ; do echo "d /var/$dir 0755 root root -" ; done)" | tee -a "/usr/lib/tmpfiles.d/bootc-base-dirs.conf" && \
-    printf "d /var/roothome 0700 root root -\nd /run/media 0755 root root -" | tee -a "/usr/lib/tmpfiles.d/bootc-base-dirs.conf" && \
-    printf '[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n' | tee "/usr/lib/ostree/prepare-root.conf"
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    /ctx/mount-system.sh
+
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /usr/bin/systemctl preset brew-setup.service && \
+    /usr/bin/systemctl preset brew-update.timer && \
+    /usr/bin/systemctl preset brew-upgrade.timer
+
 
 RUN rm -rf /var/cache/
 
