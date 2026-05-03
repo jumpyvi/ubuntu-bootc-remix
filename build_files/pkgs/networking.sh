@@ -3,6 +3,9 @@
 
 set -ouex pipefail
 
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/questing.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/questing.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list
+
 apt-get update && apt-get install -y \
     systemd-resolved \
     network-manager \
@@ -12,8 +15,12 @@ apt-get update && apt-get install -y \
     network-manager-sstp-gnome \
     network-manager-vpnc-gnome \
     openssh-server \
+    iputils-ping \
     gcr \
-    nm-connection-editor
+    nm-connection-editor \
+    tailscale
+
+
 
 
 

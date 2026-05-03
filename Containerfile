@@ -44,12 +44,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN usermod -p "$(echo "changeme" | mkpasswd -s)" root
 
 RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null && \
-    curl -fsSL https://pkgs.tailscale.com/stable/debian/sid.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list && \
     #
     apt-get update && apt-get install --fix-missing -y \
     sudo vim flatpak distrobox \
-    cups hplip tailscale \
+    cups hplip \
     ubuntu-desktop python3-nautilus && \
     #
     systemctl enable gdm && \
