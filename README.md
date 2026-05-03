@@ -11,6 +11,7 @@ Minimal ubuntu-bootc OS
 - Ublue-like tools (brew, uupd, flatpaks)
 - Firmwares and codecs ootb (for amd/intel)
 - TPM/LUKS/Systemd-homed support
+- Built for amd64v3 **only**
 
 ## Building
 

@@ -5,6 +5,8 @@ FROM docker.io/library/ubuntu:questing
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+RUN echo 'APT::Architecture-Variants "amd64v3";' > /etc/apt/apt.conf.d/99enable-amd64v3
+
 RUN echo 'Package: snapd\nPin: release a=*\nPin-Priority: -10' > /etc/apt/preferences.d/nosnap
 
 RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list && \
@@ -48,7 +50,7 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get update && apt-get install --fix-missing -y \
     sudo vim flatpak distrobox \
     cups hplip \
-    ubuntu-desktop python3-nautilus && \
+    ubuntu-desktop-minimal python3-nautilus && \
     #
     systemctl enable gdm && \
     apt-get remove -y packagekit totem snapshot shotwell simple-scan \
