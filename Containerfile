@@ -53,7 +53,7 @@ RUN apt-get update && apt-get install -y curl && \
     #
     systemctl enable gdm && \
     apt-get remove -y packagekit totem snapshot shotwell simple-scan \
-    transmission-gtk rhythmbox gnome-calculator gnome-terminal remmina usb-creator-gtk \
+    transmission-gtk rhythmbox update-manager gnome-calculator gnome-terminal remmina usb-creator-gtk \
     gnome-clocks deja-dup "libreoffice*" || true && \
     apt-get clean \
     && rm -rf /var/lib/apt/lists/*
