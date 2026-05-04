@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-rm -rf /boot /home /root /srv /var && \
+rm -rf /home /boot /root /srv /var && \
 mkdir -p \
 /sysroot /boot /usr/lib/ostree /var \
 /home /root /srv /opt /mnt \

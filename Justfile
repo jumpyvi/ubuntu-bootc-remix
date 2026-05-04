@@ -1,4 +1,4 @@
-image := env("IMAGE_FULL", "localhost/zirconium:latest")
+image := env("IMAGE_FULL", "localhost/mkosi-bootc:latest")
 filesystem := env("BUILD_FILESYSTEM", "btrfs")
 
 default:
@@ -34,7 +34,7 @@ ostree-rechunk:
           "{{image}}" || exit 1
 
 bootc *ARGS:
-    podman run \
+    sudo podman run \
         --rm --privileged --pid=host \
         -it \
         -v /etc/containers:/etc/containers:Z \

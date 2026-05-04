@@ -4,6 +4,8 @@ set -xeuo pipefail
 # install -Dpm0644 -t /usr/share/ "$SRCDIR/cache/homebrew.tar.zst"
 # install -Dpm0644 -t /usr/share/flatpak/remotes.d/ "$SRCDIR/cache/flathub.flatpakrepo"
 
+mkdir -p /sysroot
+mkdir -p /ostree
 
 sed -i 's|^ExecStart=.*|ExecStart=/usr/bin/bootc update --quiet|' /usr/lib/systemd/system/bootc-fetch-apply-updates.service
 
