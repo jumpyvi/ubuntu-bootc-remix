@@ -1,0 +1,3 @@
+[submodule "subprojects/ublue-brew"]
+	path = subprojects/ublue-brew
+	url = https://github.com/ublue-os/brew

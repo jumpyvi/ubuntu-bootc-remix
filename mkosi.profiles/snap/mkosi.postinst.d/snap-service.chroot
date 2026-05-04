@@ -1,0 +1,6 @@
+#!/bin/bash
+
+systemctl enable snap.mount \
+    snapd.apparmor.service \
+    snapd.service \
+    snapd.socket
