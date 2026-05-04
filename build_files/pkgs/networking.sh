@@ -18,7 +18,9 @@ apt-get update && apt-get install -y \
     iputils-ping \
     gcr \
     nm-connection-editor \
-    tailscale
+    tailscale \
+    wireguard \
+    wireguard-tools
 
 
 
