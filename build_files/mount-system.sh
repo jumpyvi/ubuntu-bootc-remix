@@ -17,6 +17,7 @@ printf '%s\n' \
 'd /var/mnt      0755 root root -' \
 'd /var/usrlocal 0755 root root -' \
 'd /run/media    0755 root root -' \
+'L /media        -    -    -    - /run/media' \
 'd /var/lib/snapd/snap 0755 root root -' \
 | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
 printf '[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n' \
