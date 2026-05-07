@@ -9,3 +9,5 @@ mkdir -p \
 /snap && \
 ln -s sysroot/ostree /ostree && \
 ln -s run/media /media
+
+systemctl enable home.mount mnt.mount opt.mount root.mount srv.mount
