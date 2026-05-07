@@ -66,14 +66,17 @@ ENV CARGO_HOME=/tmp/rust
 ENV RUSTUP_HOME=/tmp/rust
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
     apt-get update -y && \
-    apt-get install -y git curl make build-essential go-md2man libzstd-dev pkgconf dracut libostree-dev ostree && \
+    apt-get install -y curl make build-essential go-md2man libzstd-dev zstd pkgconf dracut libostree-dev ostree && \
     curl --proto '=https' --tlsv1.2 -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y && \
-    git clone "https://github.com/bootc-dev/bootc.git" /tmp/bootc && \
+    BOOTC_VERSION=$(curl -sf https://api.github.com/repos/bootc-dev/bootc/releases/latest | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') && \
+    curl -L "https://github.com/bootc-dev/bootc/releases/download/v${BOOTC_VERSION}/bootc-${BOOTC_VERSION}.tar.zstd" -o /tmp/bootc.tar.zstd && \
+    mkdir -p /tmp/bootc && \
+    tar --zstd -xf /tmp/bootc.tar.zstd -C /tmp/bootc --strip-components=1 && \
     sh -c ". ${RUSTUP_HOME}/env ; make -C /tmp/bootc bin install-all" && \
     printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-fix-bootc-module.conf" && \
     printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc tpm2-tss crypt plymouth "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
     dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/initramfs.img" && \
-    apt-get purge -y build-essential go-md2man libzstd-dev pkgconf libostree-dev && \
+    apt-get purge -y build-essential go-md2man libzstd-dev zstd pkgconf libostree-dev && \
     apt-get autoremove -y && \
     apt-get clean -y
 
