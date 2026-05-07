@@ -66,16 +66,10 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 ENV CARGO_HOME=/tmp/rust
 ENV RUSTUP_HOME=/tmp/rust
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
-    apt-get update -y && \
-    apt-get install -y curl make build-essential go-md2man libzstd-dev zstd pkgconf dracut libostree-dev ostree && \
-    curl --proto '=https' --tlsv1.2 -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y && \
-    BOOTC_VERSION=$(curl -sf https://api.github.com/repos/bootc-dev/bootc/releases/latest | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/') && \
-    curl -L "https://github.com/bootc-dev/bootc/releases/download/v${BOOTC_VERSION}/bootc-${BOOTC_VERSION}.tar.zstd" -o /tmp/bootc.tar.zstd && \
-    mkdir -p /tmp/bootc && \
-    tar --zstd -xf /tmp/bootc.tar.zstd -C /tmp/bootc --strip-components=1 && \
-    sh -c ". ${RUSTUP_HOME}/env ; make -C /tmp/bootc bin install-all" && \
+    curl -fsSL https://raw.githubusercontent.com/jumpyvi/bootc-deb/refs/heads/main/bootc-deb.asc | sudo gpg --dearmor -o /usr/share/keyrings/bootc-deb.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/bootc-deb.gpg] https://jumpyvi.github.io/bootc-deb/debian stable main" | sudo tee /etc/apt/sources.list.d/bootc-deb.list && \
+    apt-get update -y && apt-get install -y bootc && \
     dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/initramfs.img" && \
-    apt-get purge -y build-essential go-md2man libzstd-dev zstd pkgconf libostree-dev && \
     apt-get autoremove -y && \
     apt-get clean -y
 
