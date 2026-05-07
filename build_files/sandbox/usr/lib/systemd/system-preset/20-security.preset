@@ -1,0 +1,2 @@
+enable apparmor
+enable firewalld

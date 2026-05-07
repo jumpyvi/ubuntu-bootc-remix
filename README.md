@@ -7,11 +7,13 @@ Minimal ubuntu-bootc OS
 
 # Features
 - Based on latest Ubuntu (stuck on Questing for now)
-- Ubuntu bloat removed (No snaps, default apps)
-- Ublue-like tools (brew, uupd, flatpaks)
+- Minimal Ubuntu Desktop
+- Auto-Updates with uupd
+- All the packages (Brew, Flatpak and Snaps)
 - Firmwares and codecs ootb (for amd/intel)
 - TPM/LUKS/Systemd-homed support
 - Built for amd64v3 **only**
+- Firewalld/apparmor enabled
 
 ## Building
 
