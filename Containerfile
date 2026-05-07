@@ -5,7 +5,8 @@ FROM docker.io/library/ubuntu:questing
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN echo 'APT::Architecture-Variants "amd64v3";' > /etc/apt/apt.conf.d/99enable-amd64v3
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    cp -r /ctx/sandbox/. /
 
 RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list && \
     apt-get update
@@ -73,8 +74,6 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,
     mkdir -p /tmp/bootc && \
     tar --zstd -xf /tmp/bootc.tar.zstd -C /tmp/bootc --strip-components=1 && \
     sh -c ". ${RUSTUP_HOME}/env ; make -C /tmp/bootc bin install-all" && \
-    printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-fix-bootc-module.conf" && \
-    printf 'reproducible=yes\nhostonly=no\ncompress=zstd\nadd_dracutmodules+=" bootc tpm2-tss crypt plymouth "' | tee "/usr/lib/dracut/dracut.conf.d/30-bootcrew-bootc-container-build.conf" && \
     dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/initramfs.img" && \
     apt-get purge -y build-essential go-md2man libzstd-dev zstd pkgconf libostree-dev && \
     apt-get autoremove -y && \
