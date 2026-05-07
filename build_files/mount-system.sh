@@ -3,13 +3,13 @@
 set -ouex pipefail
 
 sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
-rm -rf /boot /home /root /srv /var && \
+rm -rf /boot /home /root /srv /var /media && \
 mkdir -p \
 /sysroot /boot /usr/lib/ostree /var \
 /home /root /srv /opt /mnt \
 /snap && \
 ln -s sysroot/ostree /ostree && \
-ln -s sysroot/ostree /ostree && \
+ln -s run/media /media && \
 printf '%s\n' \
 'd /var/home     0755 root root -' \
 'd /var/roothome 0700 root root -' \
