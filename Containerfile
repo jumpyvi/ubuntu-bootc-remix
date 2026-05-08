@@ -1,7 +1,7 @@
 FROM scratch AS ctx
 COPY build_files /
 
-FROM docker.io/library/ubuntu:questing
+FROM docker.io/library/ubuntu:resolute
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -13,9 +13,11 @@ RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list 
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
     apt-get update -y && \
-    apt-get -y install ca-certificates git curl gpg lsb-release && \
+    apt-get -y install wget ca-certificates git curl gpg lsb-release && \
+    wget -qO - https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" > /etc/apt/sources.list.d/xanmod-release.list && \
     apt-get update -y && \
-    apt-get install -y linux-image-generic clang libelf-dev lld llvm && \
+    apt-get install -y linux-xanmod-lts-x64v3 clang libelf-dev lld llvm && \
     apt-get install -y btrfs-progs dosfstools e2fsprogs fdisk skopeo systemd systemd-boot* xfsprogs && \
     cp /boot/vmlinuz-* "$(find /usr/lib/modules -maxdepth 1 -type d | tail -n 1)/vmlinuz" && \
     apt-get clean -y

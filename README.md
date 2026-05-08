@@ -5,8 +5,11 @@ Unofficial ready-to-use Atomic Ubuntu OS
 `ghcr.io/jumpyvi/ubuntu-bootc-remix:latest-amd64`
 
 
+> Until upstream bugs are fixed in 7.0, this will use XanMod's LTS
+
+
 # Features
-- Based on latest Ubuntu (stuck on Questing for now)
+- Based on latest Ubuntu
 - Minimal Ubuntu Desktop
 - Auto-Updates with uupd
 - All the packages (Brew, Flatpak and Snaps)
