@@ -13,7 +13,7 @@ Unofficial ready-to-use Atomic Ubuntu OS
 - Firmwares and codecs ootb (for amd/intel)
 - TPM/LUKS/Systemd-homed support
 - Built for amd64v3 **only**
-- Firewalld/apparmor enabled
+- UFW/apparmor enabled
 
 ## Building
 
