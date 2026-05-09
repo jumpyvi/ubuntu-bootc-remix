@@ -14,8 +14,9 @@ RUN sed -i 's/main$/main restricted universe multiverse/' /etc/apt/sources.list 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root --mount=type=tmpfs,dst=/boot \
     apt-get update -y && \
     apt-get -y install wget ca-certificates git curl gpg lsb-release && \
-    wget -qO - https://dl.xanmod.org/archive.key | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" > /etc/apt/sources.list.d/xanmod-release.list && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL -A "Mozilla/5.0 (X11; Linux x86_64)" https://gitlab.com/afrd.gpg | gpg --dearmor -vo /etc/apt/keyrings/xanmod-archive-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/xanmod-archive-keyring.gpg] http://deb.xanmod.org $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/xanmod-release.list && \
     apt-get update -y && \
     apt-get install -y linux-xanmod-lts-x64v3 clang libelf-dev lld llvm && \
     apt-get install -y btrfs-progs dosfstools e2fsprogs fdisk skopeo systemd systemd-boot* xfsprogs && \
